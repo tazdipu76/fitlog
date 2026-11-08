@@ -9,7 +9,7 @@ export default function Footer() {
           href="/" 
           className="text-white font-black tracking-widest text-lg uppercase font-oswald flex items-center gap-3"
         >
-          <img src={Logo.src || Logo} alt="FitLog Logo" className="h-6 w-auto object-contain" />
+          <img src={Logo.src} alt="FitLog Logo" className="h-6 w-auto object-contain" />
           <span>FITLOG</span>
         </Link>
         <p className="text-gray-400 text-xs md:text-sm font-medium text-center md:text-right">
