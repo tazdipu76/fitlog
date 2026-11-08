@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { usePlan } from "@/context/PlanContext";
+import Logo from "../assets/logo.png";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -15,8 +16,9 @@ export default function Navbar() {
         {/* Logo */}
         <Link 
           href="/" 
-          className="text-xl font-extrabold tracking-wider font-oswald text-white flex items-center gap-2"
+          className="text-xl font-extrabold tracking-wider font-oswald text-white flex items-center gap-3"
         >
+          <img src={Logo.src || Logo} alt="FitLog Logo" className="h-7 w-auto object-contain" />
           <span>FITLOG</span>
         </Link>
 
