@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
@@ -11,21 +11,17 @@ function MyPlanContent() {
   const searchParams = useSearchParams();
   const tabParam = searchParams.get("tab");
 
-  const [activeTab, setActiveTab] = useState<"plan" | "saved">("plan");
+  
+  const [activeTab, setActiveTab] = useState<"plan" | "saved">(
+    tabParam === "saved" ? "saved" : "plan"
+  );
   const [sortBy, setSortBy] = useState("duration");
 
   const { plan, saved, removeFromPlan, removeFromSaved, markAsDone, metrics } = usePlan();
 
-  // URL query parameter (tab=saved) অনুযায়ী Active Tab আপডেট করা
-  useEffect(() => {
-    if (tabParam === "saved") {
-      setActiveTab("saved");
-    } else {
-      setActiveTab("plan");
-    }
-  }, [tabParam]);
-
-  const currentList = activeTab === "plan" ? plan : saved;
+ 
+  const currentTab = tabParam === "saved" ? "saved" : activeTab;
+  const currentList = currentTab === "plan" ? plan : saved;
 
   const sortedList = [...currentList].sort((a, b) => {
     if (sortBy === "duration") return a.duration - b.duration;
@@ -62,22 +58,24 @@ function MyPlanContent() {
       {/* Tabs and Sort */}
       <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 mb-6">
         <div className="bg-[#12141a] p-1.5 rounded-xl flex items-center border border-gray-800 self-start">
-          <button
+          <Link
+            href="/my-plan"
             onClick={() => setActiveTab("plan")}
             className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${
-              activeTab === "plan" ? "bg-[#222630] text-white" : "text-gray-400 hover:text-white"
+              currentTab === "plan" ? "bg-[#222630] text-white" : "text-gray-400 hover:text-white"
             }`}
           >
             Today&apos;s Plan ({plan.length})
-          </button>
-          <button
+          </Link>
+          <Link
+            href="/my-plan?tab=saved"
             onClick={() => setActiveTab("saved")}
             className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${
-              activeTab === "saved" ? "bg-[#222630] text-white" : "text-gray-400 hover:text-white"
+              currentTab === "saved" ? "bg-[#222630] text-white" : "text-gray-400 hover:text-white"
             }`}
           >
             Saved ({saved.length})
-          </button>
+          </Link>
         </div>
 
         <div className="flex items-center space-x-2 self-end sm:self-auto">
@@ -146,7 +144,7 @@ function MyPlanContent() {
                   View Details
                 </Link>
 
-                {activeTab === "plan" && (
+                {currentTab === "plan" && (
                   <button
                     onClick={() => markAsDone(item.id)}
                     className="p-2.5 bg-green-500/20 hover:bg-green-500/30 text-green-400 rounded-xl transition-colors"
@@ -158,7 +156,7 @@ function MyPlanContent() {
 
                 <button
                   onClick={() =>
-                    activeTab === "plan" ? removeFromPlan(item.id) : removeFromSaved(item.id)
+                    currentTab === "plan" ? removeFromPlan(item.id) : removeFromSaved(item.id)
                   }
                   className="p-2.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-xl transition-colors"
                   title="Remove"
