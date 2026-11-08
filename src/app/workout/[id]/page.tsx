@@ -10,7 +10,7 @@ import { Clock, Flame, Star } from "lucide-react";
 type Params = Promise<{ id: string }>;
 
 export default function WorkoutDetails({ params }: { params: Params }) {
-  // Next.js 15+ এ params হলো Promise, তাই use() হুক দিয়ে এটি রিসিভ করতে হয়
+ 
   const { id } = use(params);
 
   const { plan, addToPlan, addToSaved } = usePlan();

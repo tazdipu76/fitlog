@@ -22,33 +22,27 @@ interface PlanContextType {
 const PlanContext = createContext<PlanContextType | null>(null);
 
 export function PlanProvider({ children }: { children: ReactNode }) {
-  const [plan, setPlan] = useState<PlanWorkout[]>([]);
-  const [saved, setSaved] = useState<Workout[]>([]);
-  const [isHydrated, setIsHydrated] = useState(false);
+ 
+  const [plan, setPlan] = useState<PlanWorkout[]>(() => {
+    if (typeof window === "undefined") return [];
+    const stored = localStorage.getItem("fitlog-plan");
+    return stored ? JSON.parse(stored) : [];
+  });
 
-  // Load from localStorage on mount
+  const [saved, setSaved] = useState<Workout[]>(() => {
+    if (typeof window === "undefined") return [];
+    const stored = localStorage.getItem("fitlog-saved");
+    return stored ? JSON.parse(stored) : [];
+  });
+
   useEffect(() => {
-    const storedPlan = localStorage.getItem("fitlog-plan");
-    const storedSaved = localStorage.getItem("fitlog-saved");
+    localStorage.setItem("fitlog-plan", JSON.stringify(plan));
+  }, [plan]);
 
-    if (storedPlan) setPlan(JSON.parse(storedPlan));
-    if (storedSaved) setSaved(JSON.parse(storedSaved));
-    setIsHydrated(true);
-  }, []);
 
-  // Save plan to localStorage
   useEffect(() => {
-    if (isHydrated) {
-      localStorage.setItem("fitlog-plan", JSON.stringify(plan));
-    }
-  }, [plan, isHydrated]);
-
-  // Save saved list to localStorage
-  useEffect(() => {
-    if (isHydrated) {
-      localStorage.setItem("fitlog-saved", JSON.stringify(saved));
-    }
-  }, [saved, isHydrated]);
+    localStorage.setItem("fitlog-saved", JSON.stringify(saved));
+  }, [saved]);
 
   const addToPlan = (workout: Workout) => {
     if (plan.length >= 5) {
