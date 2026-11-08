@@ -24,7 +24,7 @@ export default function Hero() {
       </div>
       
       <div className="w-full lg:w-auto flex justify-center">
-        <img src={Image.src || Image} alt="Workout Banner" className="max-w-full h-auto object-contain" />
+        <img src={Image.src} alt="Workout Banner" className="max-w-full h-auto object-contain" />
       </div>
     </section>
   );
