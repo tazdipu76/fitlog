@@ -18,7 +18,7 @@ export default function Navbar() {
           href="/" 
           className="text-xl font-extrabold tracking-wider font-oswald text-white flex items-center gap-3"
         >
-          <img src={Logo.src || Logo} alt="FitLog Logo" className="h-7 w-auto object-contain" />
+          <img src={Logo.src} alt="FitLog Logo" className="h-7 w-auto object-contain" />
           <span>FITLOG</span>
         </Link>
 
